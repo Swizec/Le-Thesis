@@ -1,4 +1,3 @@
-
 # Le Thesis
 
 This is my graduation thesis, feel free to poke around and tell
@@ -26,7 +25,7 @@ Parameters to be learned:
 
 Most of this basically requires a way to syllabify text, which I
 believe can be achieved by finding a good substring cover of the
-corpora with strings adhering to the C*V+C* pattern.
+corpora with strings adhering to the C\*V+C\* pattern.
 
 Semantically the system needs to
 
