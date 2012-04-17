@@ -6,6 +6,12 @@ me what an idiot I am.
 It comes out of a project I slowly started working on a while ago: https://github.com/Swizec/Generative-poetry
 
 
+Some recaps of general research in this field are on my blog:
+
+* Towards a computational model of poetry generation: http://swizec.com/blog/science-wednesday-towards-a-computational-model-of-poetry-generation/swizec/3855
+* Defining poetry: http://swizec.com/blog/science-wednesday-defining-poetry/swizec/4079
+
+
 # Le Goals
 
 To implement a system that, given a corpora of poetry, can learn how
