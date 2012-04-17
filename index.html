@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Le-thesis by Swizec</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/Swizec/Le-Thesis">Fork On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/Swizec/Le-Thesis/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/Swizec/Le-Thesis/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Le-thesis</h1>
+          <p>My graduation thesis thing</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/Swizec">Swizec</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>Le Thesis</h1>
+
+<p>This is my graduation thesis, feel free to poke around and tell
+me what an idiot I am.</p>
+
+<p>It comes out of a project I slowly started working on a while ago: <a href="https://github.com/Swizec/Generative-poetry">https://github.com/Swizec/Generative-poetry</a></p>
+
+<p>Some recaps of general research in this field are on my blog:</p>
+
+<ul>
+<li>Towards a computational model of poetry generation: <a href="http://swizec.com/blog/science-wednesday-towards-a-computational-model-of-poetry-generation/swizec/3855">http://swizec.com/blog/science-wednesday-towards-a-computational-model-of-poetry-generation/swizec/3855</a></li>
+<li>Defining poetry: <a href="http://swizec.com/blog/science-wednesday-defining-poetry/swizec/4079">http://swizec.com/blog/science-wednesday-defining-poetry/swizec/4079</a></li>
+</ul><h1>Le Goals</h1>
+
+<p>To implement a system that, given a corpora of poetry, can learn how
+to write its own poetry on par so that a layman observer cannot
+distinguish a generated poem from one written by a poet.</p>
+
+<h2>Learning</h2>
+
+<p>Parameters to be learned:</p>
+
+<ul>
+<li>rhyming structure (phonetic match of last syllables in verse)</li>
+<li>assonance structure (vowel repetition for internal rhyming)</li>
+<li>alliteration structure (consonant repetition)</li>
+<li>rhythm</li>
+<li>verse structure</li>
+<li>stanza structure</li>
+</ul><p>Most of this basically requires a way to syllabify text, which I
+believe can be achieved by finding a good substring cover of the
+corpora with strings adhering to the C*V+C* pattern.</p>
+
+<p>Semantically the system needs to</p>
+
+<ul>
+<li>sentence structure - supposedly well achievable with lexicalized
+probabilistic context free grammars</li>
+<li>semantic structure (at least for internal consistency)</li>
+<li>sentiment (emotional infliction of the poems)</li>
+</ul><h2>Generating</h2>
+
+<p>The above parameters of a poem should be constructed into some sort of
+DNA from which poems can then be generated. It is important to achieve</p>
+
+<ul>
+<li>correct rhyming/assonance/alliteration or combination of these</li>
+<li>consistent use of rhythm</li>
+<li>appropriate division into verses and stanzas</li>
+<li>correct sentence structure</li>
+<li>internal semantic consistency</li>
+</ul><h2>Measuring success</h2>
+
+<p>It shouldn't be too difficult to measure correctness in terms of
+proper rhyming etc. as long as we stick to strict poetic structures.</p>
+
+<p>But this looks like an arduous manual process, so a better solution
+needs to be found.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+  </body>
+</html>
