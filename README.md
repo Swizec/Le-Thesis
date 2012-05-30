@@ -10,6 +10,9 @@ Some recaps of general research in this field are on my blog:
 
 * Towards a computational model of poetry generation: http://swizec.com/blog/science-wednesday-towards-a-computational-model-of-poetry-generation/swizec/3855
 * Defining poetry: http://swizec.com/blog/science-wednesday-defining-poetry/swizec/4079
+* Comparing automatic poetry generators: http://swizec.com/blog/comparing-automatic-poetry-generators/swizec/4207
+* Natural Language Generation system architectures: http://swizec.com/blog/natural-language-generation-system-architectures/swizec/4535
+
 
 
 # Le Goals
