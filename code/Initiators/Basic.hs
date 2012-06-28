@@ -5,5 +5,6 @@ module Initiators.Basic (
 
 import System.Random
 
+start_population :: (RandomGen g) => g -> [[Char]]
 start_population gen =
-  [take 5 $ randomRs ('a', 'z') gen | x <- [0..]]
+  [take 50 $ randomRs ('a', 'z') gen | x <- [0..]]
