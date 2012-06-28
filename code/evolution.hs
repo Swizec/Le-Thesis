@@ -3,10 +3,10 @@ import qualified Initiators.Basic as Basic
 
 import System.Random
 
-population :: Int -> [a] -> [Int]
-population 0 _ = Basic.start_population 5
+--population :: Int -> [a] -> [Int]
+--population 0 _ = Basic.start_population 5
 
-randomStuff g = randomRs ('a', 'z') g
+--randomStuff g = randomRs ('a', 'z') g
 
 -- work (r:rs) =
 --  let n = truncate r + 1
@@ -14,5 +14,9 @@ randomStuff g = randomRs ('a', 'z') g
 --  in xs : work ys
 
 main = do
-  print $ population 0 []
-  print $ take 5 $ randomStuff (mkStdGen 42)
+  randomGen <- newStdGen
+  print $ take 15 $ Basic.start_population randomGen
+
+  --print $ population 0 []
+
+--     print $ take 15 $ randoms gen::[Char]

@@ -5,7 +5,5 @@ module Initiators.Basic (
 
 import System.Random
 
-type Rand a = StdGen -> (a, StdGen)
-
-start_population n =
-  [x | x <- [1..n]]
+start_population gen =
+  [take 5 $ randomRs ('a', 'z') gen | x <- [0..]]
