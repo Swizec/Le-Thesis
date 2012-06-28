@@ -7,4 +7,4 @@ import System.Random
 
 start_population :: (RandomGen g) => g -> [[Char]]
 start_population gen =
-  [take 50 $ randomRs ('a', 'z') gen | x <- [0..]]
+  [take 50 $ randomRs ('A', 'z') gen | x <- [0..]]
