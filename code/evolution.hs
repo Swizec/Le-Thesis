@@ -14,4 +14,6 @@ evaluate (x:xs) = (Evaluator.evaluate x):evaluate xs
 main = do
   randomGen <- newStdGen
 
-  print $ evaluate $ take 2 $ population randomGen 0
+  print $ Evaluator.levenshtein "neki" "nneki"
+
+--  print $ evaluate $ population randomGen 0
