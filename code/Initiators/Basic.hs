@@ -7,4 +7,8 @@ import System.Random
 
 start_population :: (RandomGen g) => g -> [[Char]]
 start_population gen =
-  [take 50 $ randomRs ('A', 'z') gen | x <- [0..]]
+  let chars = " abcdefghijklmnopqrtstuvwxyzABCDEFGHIJKLMNOPQRTSUVWXYZ"
+      ns = randomRs (0, length chars-1) gen
+  in [take 50 $ drop (x*50) $ map (chars !!) ns | x <- [0..]]
+
+-- ^this is actually very slow
