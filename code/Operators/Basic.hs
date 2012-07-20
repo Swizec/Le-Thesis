@@ -8,6 +8,12 @@ import Data.List
 
 mutate::(RandomGen g) => [Char] -> g -> ([Char], g)
 mutate s gen
+  | should' = mutate' s gen'
+  | otherwise = (s, gen')
+  where (should', gen') = should gen
+
+mutate'::(RandomGen g) => [Char] -> g -> ([Char], g)
+mutate' s gen
   | typ == 2 = change place s gen'
   | typ == 1 = (remove place s, gen')
   | typ == 0 = add place s gen'
@@ -42,3 +48,9 @@ randChar gen =
   let chars = " abcdefghijklmnopqrtstuvwxyzABCDEFGHIJKLMNOPQRTSUVWXYZ"
       (c, gen') = randomR (0, (-1 +)$length chars) gen
   in (chars!!c, gen')
+
+should::(RandomGen g) => g -> (Bool, g)
+should gen =
+  let (i, g) = next gen
+  in (fromIntegral (i `mod` 10) / 10 > 0.3,
+      g)
