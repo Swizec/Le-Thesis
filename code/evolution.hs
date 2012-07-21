@@ -12,9 +12,12 @@ evaluate :: (Num a) => [[Char]] -> [(a, [Char])]
 evaluate [x] = [Evaluator.evaluate x]
 evaluate (x:xs) = (Evaluator.evaluate x):evaluate xs
 
+--mutate::(RandomGen g, Num a) => g - > [(a, [Char])] -> [[Char]]
+--mutate gen
+
 main = do
   randomGen <- newStdGen
 
-  print $ Operator.mutate "Hello World" randomGen
+  --print $ Operator.mutate "Hello World" randomGen
 
---  print $ mutate randomGen $ evaluate $ population 0 randomGen
+  print $ evaluate $ population 0 randomGen

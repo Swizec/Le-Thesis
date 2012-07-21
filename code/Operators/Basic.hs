@@ -26,17 +26,20 @@ choose len gen =
       (place, g') = randomR (0, len-1) gen
   in (typ, place, g')
 
+-- replaces character at p with random character
 change::(RandomGen g) => Int -> [Char] -> g -> ([Char], g)
 change p s gen =
   let (c, gen') = randChar gen
       (left, right) = splitAt p s
   in (left ++ c:right, gen')
 
+-- removes character at p
 remove::Int -> [Char] -> [Char]
 remove p s =
   let (left, right) = splitAt p s
   in left ++ tail right
 
+-- adds random character at p
 add::(RandomGen g) => Int -> [Char] -> g -> ([Char], g)
 add p s gen =
   let (c, gen') = randChar gen
