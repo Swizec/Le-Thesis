@@ -8,6 +8,7 @@ import System.Random
 
 population :: (RandomGen g) => Int -> g -> [[Char]]
 population 0 gen = take 30 $ Initiator.start_population gen
+population n gen = map (snd) $! Selector.select $! evaluate $! mutate gen $! population (n-1) gen
 
 evaluate :: (Num a) => [[Char]] -> [(a, [Char])]
 evaluate [x] = [Evaluator.evaluate x]
@@ -25,6 +26,8 @@ mutate gen (x:xs) =
 main = do
   randomGen <- newStdGen
 
+  print $ evaluate $! population 3 randomGen
+
   --print $ Operator.mutate "Hello World" randomGen
 
-  print $ Selector.select $! evaluate $! mutate randomGen $! population 0 randomGen
+  --print $ Selector.select $! evaluate $! mutate randomGen $! population 0 randomGen
