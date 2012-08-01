@@ -2,6 +2,7 @@
 import qualified Initiators.Basic as Initiator
 import qualified Evaluators.Basic as Evaluator
 import qualified Operators.Basic as Operator
+import qualified Selectors.Basic as Selector
 
 import System.Random
 
@@ -26,4 +27,4 @@ main = do
 
   --print $ Operator.mutate "Hello World" randomGen
 
-  print $ evaluate $! mutate randomGen $! population 0 randomGen
+  print $ Selector.select $! evaluate $! mutate randomGen $! population 0 randomGen
