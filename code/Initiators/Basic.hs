@@ -11,4 +11,3 @@ start_population gen =
       ns = randomRs (0, length chars-1) gen
   in [take 50 $ drop (x*50) $ map (chars !!) ns | x <- [0..]]
 
--- ^this is actually very slow
