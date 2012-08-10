@@ -1,7 +1,7 @@
 
 import qualified Initiators.Basic as Initiator
 import qualified Evaluators.Basic as Evaluator
-import qualified Operators.Basic as Operator
+import qualified Operators.Basic as Operators
 import qualified Selectors.Basic as Selector
 
 import System.Random
@@ -11,9 +11,9 @@ evaluate [x] = [Evaluator.evaluate x]
 evaluate (x:xs) = (Evaluator.evaluate x):evaluate xs
 
 mutate :: (RandomGen g) => g -> [[Char]] -> [([Char], g)]
-mutate gen [x] = [Operator.mutate x gen]
+mutate gen [x] = [Operators.mutate x gen]
 mutate gen (x:xs) =
-  let (x', gen') = Operator.mutate x gen
+  let (x', gen') = Operators.mutate x gen
   in (x', gen'):mutate gen' xs
 
 mutate' :: (RandomGen g) => g -> [[Char]] -> (g, [[Char]])
@@ -31,11 +31,13 @@ population n gen =
 main = do
   randomGen <- newStdGen
 
-  print $ evaluate $ snd $ population 0 randomGen
-  print $ evaluate $ snd $ population 1 randomGen
-  print $ evaluate $ snd $ population 2 randomGen
-  print $ evaluate $ snd $ population 3 randomGen
-  print $ evaluate $ snd $ population 4 randomGen
+  print $ Operators.breed "Hello World" "This is silly" randomGen
+
+--  print $ evaluate $ snd $ population 0 randomGen
+--  print $ evaluate $ snd $ population 1 randomGen
+--  print $ evaluate $ snd $ population 2 randomGen
+--  print $ evaluate $ snd $ population 3 randomGen
+--  print $ evaluate $ snd $ population 4 randomGen
 
 --  print $ mutate' randomGen $ population 0 randomGen
 

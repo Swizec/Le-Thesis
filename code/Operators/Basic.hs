@@ -1,6 +1,7 @@
 
 module Operators.Basic (
-  mutate
+  mutate,
+  breed
   ) where
 
 import System.Random
@@ -57,3 +58,16 @@ should gen =
   let (i, g) = next gen
   in (fromIntegral (i `mod` 10) / 10 > 0.3,
       g)
+
+
+-- breeds two strings
+breed::(RandomGen g) => [Char] -> [Char] -> g -> ([Char], [Char], g)
+breed a b gen =
+  let (len, gen') = randomR (0, length a `div` 2) gen
+      (s1, gen'') = randomR (0, length a - len) gen'
+      (s2, gen''') = randomR (0, length b - len) gen''
+      (l1, r1) = splitAt s1 a
+      (l2, r2) = splitAt s2 b
+  in (l1++fst (splitAt len r2)++snd (splitAt len r1),
+      l2++fst (splitAt len r1)++snd (splitAt len r2),
+      gen''')
