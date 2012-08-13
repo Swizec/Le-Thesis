@@ -7,16 +7,16 @@ module Operators.Basic (
 import System.Random
 import Data.List
 
-mutate::(RandomGen g) => [Char] -> g -> ([Char], g)
-mutate s gen
-  | should' = mutate' s gen'
-  | otherwise = (s, gen')
-  where (should', gen') = should gen
+mutate::(RandomGen g) => g -> [Char] -> (g, [Char])
+mutate gen s
+  | should' = mutate' gen' s
+  | otherwise = (gen', s)
+  where (gen', should') = should gen
 
-mutate'::(RandomGen g) => [Char] -> g -> ([Char], g)
-mutate' s gen
+mutate'::(RandomGen g) => g -> [Char] -> (g, [Char])
+mutate' gen s
   | typ == 2 = change place s gen'
-  | typ == 1 = (remove place s, gen')
+  | typ == 1 = (gen', remove place s)
   | typ == 0 = add place s gen'
   where (typ, place, gen') = choose (length s) gen
 
@@ -28,11 +28,11 @@ choose len gen =
   in (typ, place, g')
 
 -- replaces character at p with random character
-change::(RandomGen g) => Int -> [Char] -> g -> ([Char], g)
+change::(RandomGen g) => Int -> [Char] -> g -> (g, [Char])
 change p s gen =
-  let (c, gen') = randChar gen
+  let (gen', c) = randChar gen
       (left, right) = splitAt p s
-  in (left ++ c:right, gen')
+  in (gen', left ++ c:right)
 
 -- removes character at p
 remove::Int -> [Char] -> [Char]
@@ -41,33 +41,40 @@ remove p s =
   in left ++ tail right
 
 -- adds random character at p
-add::(RandomGen g) => Int -> [Char] -> g -> ([Char], g)
+add::(RandomGen g) => Int -> [Char] -> g -> (g, [Char])
 add p s gen =
-  let (c, gen') = randChar gen
+  let (gen', c) = randChar gen
       (left, right) = splitAt p s
-  in (left ++ c:tail right, gen')
+  in (gen', left ++ c:tail right)
 
-randChar::(RandomGen g) => g -> (Char, g)
+randChar::(RandomGen g) => g -> (g, Char)
 randChar gen =
   let chars = " abcdefghijklmnopqrtstuvwxyzABCDEFGHIJKLMNOPQRTSUVWXYZ"
       (c, gen') = randomR (0, (-1 +)$length chars) gen
-  in (chars!!c, gen')
+  in (gen', chars!!c)
 
-should::(RandomGen g) => g -> (Bool, g)
+should::(RandomGen g) => g -> (g, Bool)
 should gen =
   let (i, g) = next gen
-  in (fromIntegral (i `mod` 10) / 10 > 0.3,
-      g)
+  in (g, fromIntegral (i `mod` 10) / 10 > 0.3)
 
+
+-- performs breeding on a population
+breed::(RandomGen g) => g -> [[Char]] -> (g, [[Char]])
+breed gen xs =
+  let pairs = map (\ [a,b] -> (a,b)) $ filter (\a -> length a == 2) . (!!0) $
+              map (subsequences) $ permutations xs
+      (gen', bred) = mapAccumL breedTwo gen pairs
+  in (gen', xs ++ foldr (\ (a,b) acc -> a:b:acc) [] bred)
 
 -- breeds two strings
-breed::(RandomGen g) => [Char] -> [Char] -> g -> ([Char], [Char], g)
-breed a b gen =
+breedTwo::(RandomGen g) => g -> ([Char], [Char]) -> (g, ([Char], [Char]))
+breedTwo gen (a, b) =
   let (len, gen') = randomR (0, length a `div` 2) gen
       (s1, gen'') = randomR (0, length a - len) gen'
       (s2, gen''') = randomR (0, length b - len) gen''
       (l1, r1) = splitAt s1 a
       (l2, r2) = splitAt s2 b
-  in (l1++fst (splitAt len r2)++snd (splitAt len r1),
-      l2++fst (splitAt len r1)++snd (splitAt len r2),
-      gen''')
+  in (gen''',
+      (l1++fst (splitAt len r2)++snd (splitAt len r1),
+      l2++fst (splitAt len r1)++snd (splitAt len r2)))
