@@ -9,5 +9,5 @@ start_population :: (RandomGen g) => g -> [[Char]]
 start_population gen =
   let chars = " abcdefghijklmnopqrtstuvwxyzABCDEFGHIJKLMNOPQRTSUVWXYZ"
       ns = randomRs (0, length chars-1) gen
-  in [take 50 $ drop (x*50) $ map (chars !!) ns | x <- [0..]]
+  in [take 20 $ drop (x*20) $ map (chars !!) ns | x <- [0..]]
 

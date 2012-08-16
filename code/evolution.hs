@@ -11,35 +11,21 @@ evaluate :: (Num a) => [[Char]] -> [(a, [Char])]
 evaluate [x] = [Evaluator.evaluate x]
 evaluate (x:xs) = (Evaluator.evaluate x):evaluate xs
 
-mutate :: (RandomGen g) => g -> [[Char]] -> (g, [[Char]])
-mutate gen xs = mapAccumL Operators.mutate gen xs
+mutate :: (RandomGen g) => (g, [[Char]]) -> (g, [[Char]])
+mutate (gen, xs) = mapAccumL Operators.mutate gen xs
 
 breed::(RandomGen g, Num a, Ord a) => g -> [(a, [Char])] -> (g, [[Char]])
 breed gen xs = Operators.breed gen $ map (snd) $ Selector.select xs
 
 -- main loop
 population :: (RandomGen g) => Int -> g -> (g, [[Char]])
-population 0 gen = mutate gen $ take 6 $ Initiator.start_population gen
+population 0 gen = mutate (gen, take 30 $ Initiator.start_population gen)
 population n gen =
-  let (gen', xs) = population (n-1) gen
---      (new_pop, gen'') = breed gen' $ Selector.select . evaluate xs
-  in (gen', map (snd) $! Selector.select $ evaluate xs)
+  let (gen', xs) = mutate $ population (n-1) gen
+  in breed gen' $! evaluate xs
+--  in (gen'',  bred)
 
 main = do
   randomGen <- newStdGen
 
---  print $ Operators.breed "Hello World" "This is silly" randomGen
-
-  print $ breed randomGen $ evaluate $ snd $ population 0 randomGen
-
---  print $ evaluate $ snd $ population 0 randomGen
---  print $ evaluate $ snd $ population 1 randomGen
---  print $ evaluate $ snd $ population 2 randomGen
---  print $ evaluate $ snd $ population 3 randomGen
---  print $ evaluate $ snd $ population 4 randomGen
-
---  print $ mutate' randomGen $ population 0 randomGen
-
---  print $ Operator.mutate "Hello World" randomGen
-
---  print $ Selector.select $! evaluate $! mutate randomGen $! population 0 randomGen
+  print $ (!!0) . Selector.select . evaluate . snd $ population 5 randomGen

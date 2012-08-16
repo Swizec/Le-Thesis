@@ -7,6 +7,8 @@ module Operators.Basic (
 import System.Random
 import Data.List
 
+import qualified Evaluators.Basic as Evaluator
+
 mutate::(RandomGen g) => g -> [Char] -> (g, [Char])
 mutate gen s
   | should' = mutate' gen' s
@@ -62,10 +64,19 @@ should gen =
 -- performs breeding on a population
 breed::(RandomGen g) => g -> [[Char]] -> (g, [[Char]])
 breed gen xs =
-  let pairs = map (\ [a,b] -> (a,b)) $ filter (\a -> length a == 2) . (!!0) $
-              map (subsequences) $ permutations xs
+--  let pairs = map (\ [a,b] -> (a,b)) $ filter (\a -> length a == 2) . (!!0) $
+--              map (subsequences) $ permutations xs
+  let pairs = (zip xs $ repeat xs!!0)++(zip xs $ repeat xs!!1)
       (gen', bred) = mapAccumL breedTwo gen pairs
-  in (gen', xs ++ foldr (\ (a,b) acc -> a:b:acc) [] bred)
+  in (gen', xs ++ foldr (\ (a,b) acc -> (better a b):acc) [] bred)
+
+better::[Char] -> [Char] -> [Char]
+better a b
+  | a' > b' = a
+  | a' < b' = b
+  | otherwise = a
+  where a' = fst $ Evaluator.evaluate a
+        b' = fst $ Evaluator.evaluate b
 
 -- breeds two strings
 breedTwo::(RandomGen g) => g -> ([Char], [Char]) -> (g, ([Char], [Char]))
