@@ -8,7 +8,11 @@ import Data.Array
 
 evaluate::(Num a) => [Char] -> (a, [Char])
 --evaluate s = (fromIntegral $ levenshtein s "Hello World", s)
-evaluate s = (fromIntegral $ lev''' s "Hello World", s)
+evaluate s
+  -- make sure string doesn't get too short
+  | len >= 11 = (fromIntegral $ lev''' s "Hello World", s)
+  | len < 11 = (100000, s)
+  where len = length s
 
 
 -- calculate levenshtein distance between two strings
