@@ -68,15 +68,7 @@ breed gen xs =
 --              map (subsequences) $ permutations xs
   let pairs = (zip xs $ repeat xs!!0)++(zip xs $ repeat xs!!1)
       (gen', bred) = mapAccumL breedTwo gen pairs
-  in (gen', xs ++ foldr (\ (a,b) acc -> (better a b):acc) [] bred)
-
-better::[Char] -> [Char] -> [Char]
-better a b
-  | a' > b' = a
-  | a' < b' = b
-  | otherwise = a
-  where a' = fst $ Evaluator.evaluate a
-        b' = fst $ Evaluator.evaluate b
+  in (gen', xs ++ foldr (\ (a,b) acc -> a:b:acc) [] bred)
 
 -- breeds two strings
 breedTwo::(RandomGen g) => g -> ([Char], [Char]) -> (g, ([Char], [Char]))
