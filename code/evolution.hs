@@ -8,8 +8,7 @@ import System.Random
 import Data.List
 
 evaluate :: (Num a) => [[Char]] -> [(a, [Char])]
-evaluate [x] = [Evaluator.evaluate x]
-evaluate (x:xs) = (Evaluator.evaluate x):evaluate xs
+evaluate xs = map Evaluator.evaluate xs
 
 mutate :: (RandomGen g) => (g, [[Char]]) -> (g, [[Char]])
 mutate (gen, xs) = mapAccumL Operators.mutate gen xs
@@ -21,9 +20,18 @@ breed gen xs = Operators.breed gen $ map (snd) $ xs
 population :: (RandomGen g) => Int -> g -> (g, [[Char]])
 population 0 gen = mutate (gen, take 30 $ Initiator.start_population gen)
 population n gen =
-  let (gen', xs) = mutate $ population (n-1) gen
-      (gen'', bred) = breed gen' $ evaluate xs
-  in (gen'', (map (snd)) . Selector.select $ evaluate bred)
+  let pop = population (n-1) gen
+  in step pop
+
+-- if solution found, just escalate current population
+-- otherwise do an evolution step
+step::(RandomGen g) => (g, [[Char]]) -> (g, [[Char]])
+step pop
+  | best == 0 = pop
+  | otherwise = let (gen', xs) = mutate pop
+                    (gen'', bred) = breed gen' $ evaluate xs
+                in (gen'', (map (snd)) . Selector.select $ evaluate bred)
+  where best = fst . Selector.best $ evaluate (snd pop)
 
 main = do
   randomGen <- newStdGen
@@ -31,3 +39,4 @@ main = do
 --  print $ (take 10) . Selector.select . evaluate . snd $ population 20 randomGen
   let pop = Selector.order . evaluate . snd $ population 20 randomGen
     in print (length pop, head pop, last pop)
+--  print $ fst $ minimumBy (\a b -> compare (fst a) (fst b)) $ evaluate . snd $ population 10 randomGen
