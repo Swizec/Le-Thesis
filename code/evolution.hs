@@ -37,6 +37,6 @@ main = do
   randomGen <- newStdGen
 
 --  print $ (take 10) . Selector.select . evaluate . snd $ population 20 randomGen
-  let pop = Selector.order . evaluate . snd $ population 20 randomGen
+  let pop = Selector.order . evaluate . snd $ population 50 randomGen
     in print (length pop, head pop, last pop)
 --  print $ fst $ minimumBy (\a b -> compare (fst a) (fst b)) $ evaluate . snd $ population 10 randomGen

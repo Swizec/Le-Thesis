@@ -36,10 +36,10 @@ levenshtein s1 s2
 lev''' :: (Eq a) => [a] -> [a] -> Int
 lev''' xs ys = levMemo ! (n, m)
   where levMemo = array ((0,0),(n,m)) [((i,j),lev i j) | i <- [0..n], j <- [0..m]]
-        n = length xs - 1
-        m = length ys - 1
-        xa = listArray (0, n) xs
-        ya = listArray (0, m) ys
+        n = length xs
+        m = length ys
+        xa = listArray (1, n) xs
+        ya = listArray (1, m) ys
         lev 0 v = v
         lev u 0 = u
         lev u v
@@ -49,8 +49,10 @@ lev''' xs ys = levMemo ! (n, m)
                                             levMemo ! (u-1, v-1)]
 
 
+
 -- nonquadratic space version of the above
 -- from http://www.reddit.com/r/programming/comments/w4gs6/levenshtein_distance_in_haskell/c5aejpf
+-- for some reason this doesn't seem very effective
 levInit xa ya = (0, array (0,m) [(j,j) | j <- [0..m]])
   where (0,m) = bounds ya
 

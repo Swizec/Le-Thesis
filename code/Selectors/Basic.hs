@@ -8,11 +8,11 @@ module Selectors.Basic (
 import Data.List
 
 select::(Num a, Ord a) => [(a, [Char])] -> [(a, [Char])]
-select xs = top100k xs
+select xs = top 10000 xs
 
 -- gives the top 100k members
-top100k::(Num a, Ord a) => [(a, [Char])] -> [(a, [Char])]
-top100k xs = take 100000 $ order xs
+top::(Num a, Ord a) => Int -> [(a, [Char])] -> [(a, [Char])]
+top n xs = take n $ order xs
 
 -- the basic selector just picks the top 50% and passes them on
 top50::(Num a, Ord a) => [(a, [Char])] -> [(a, [Char])]
