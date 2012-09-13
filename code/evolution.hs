@@ -32,5 +32,5 @@ step pop
 
 main = do
   randomGen <- newStdGen
-  let pop = Selector.order . evaluate . snd $ population 50 randomGen
+  let pop = Selector.order . evaluate . snd $ population 43 randomGen
     in print (take 20 pop, last pop)

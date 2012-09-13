@@ -22,7 +22,7 @@ mutate'::(RandomGen g) => g -> [Char] -> (g, [Char])
 mutate' gen s
   | should' = do_operation gen' s
   | otherwise = (gen', s)
-  where (gen', should') = should gen
+  where (gen', should') = should gen (fst $ Evaluator.evaluate s)
 
 -- do a mutation
 do_operation::(RandomGen g) => g -> [Char] -> (g, [Char])
@@ -65,10 +65,10 @@ randChar gen =
       (c, gen') = randomR (0, (-1 +)$length chars) gen
   in (gen', chars!!c)
 
-should::(RandomGen g) => g -> (g, Bool)
-should gen =
+should::(RandomGen g, Fractional a, Ord a) => g -> a -> (g, Bool)
+should gen fitness =
   let (i, g) = next gen
-  in (g, fromIntegral (i `mod` 10) / 10 > 0.3)
+  in (g, 1-1/(fitness/(1-(fromIntegral (i `mod` 10) / 10))) > 0.8)
 
 
 -- performs breeding on a population
