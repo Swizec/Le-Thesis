@@ -7,10 +7,12 @@ module Selectors.Basic (
 
 import Data.List
 
-select::(Num a, Ord a) => [(a, [Char])] -> [(a, [Char])]
-select xs = top 10000 xs
+import Config
 
--- gives the top 100k members
+select::(Num a, Ord a) => [(a, [Char])] -> [(a, [Char])]
+select xs = top Config.max_population xs
+
+-- gives the top N members
 top::(Num a, Ord a) => Int -> [(a, [Char])] -> [(a, [Char])]
 top n xs = take n $ order xs
 

@@ -8,6 +8,7 @@ import System.Random
 import Data.List
 
 import qualified Evaluators.Basic as Evaluator
+import Config
 
 -- runs mutation on a whole population
 mutate :: (RandomGen g) => (g, [[Char]]) -> (g, [[Char]])
@@ -15,7 +16,7 @@ mutate (gen, xs) = mapAccumL mutate1 gen xs
 
 -- mutates single element several times
 mutate1::(RandomGen g) => g -> [Char] -> (g, [Char])
-mutate1 gen s = fst $ mapAccumL (\(g, s) _ -> (mutate' g s, 0)) (gen, s) [1]
+mutate1 gen s = fst $ mapAccumL (\(g, s) _ -> (mutate' g s, 0)) (gen, s) $ take Config.mutate_N (repeat 1)
 
 -- possibly mutate a single string
 mutate'::(RandomGen g) => g -> [Char] -> (g, [Char])
@@ -65,17 +66,14 @@ randChar gen =
       (c, gen') = randomR (0, (-1 +)$length chars) gen
   in (gen', chars!!c)
 
-should::(RandomGen g, Fractional a, Ord a) => g -> a -> (g, Bool)
+should::(RandomGen g) => g -> Double -> (g, Bool)
 should gen fitness =
-  let (i, g) = next gen
-  in (g, 1-1/(fitness/(1-(fromIntegral (i `mod` 10) / 10))) > 0.8)
-
+  let (i, g) = randomR (0.0, 0.99) gen
+  in (g, 1-1/(fitness/(1-i))  > Config.mutate_threshold)
 
 -- performs breeding on a population
 breed::(RandomGen g) => g -> [[Char]] -> (g, [[Char]])
 breed gen xs =
---  let pairs = map (\ [a,b] -> (a,b)) $ filter (\a -> length a == 2) . (!!0) $
---              map (subsequences) $ permutations xs
   let pairs = (zip xs $ repeat xs!!0)++(zip xs $ repeat xs!!1)
       (gen', bred) = mapAccumL breedTwo gen pairs
   in (gen', xs ++ foldr (\ (a,b) acc -> a:b:acc) [] bred)

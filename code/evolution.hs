@@ -3,6 +3,7 @@ import qualified Initiators.Basic as Initiator
 import qualified Evaluators.Basic as Evaluator
 import qualified Operators.Basic as Operators
 import qualified Selectors.Basic as Selector
+import Config
 
 import System.Random
 import Data.List
@@ -15,7 +16,7 @@ breed gen xs = Operators.breed gen $ map (snd) $ xs
 
 -- main loop
 population :: (RandomGen g) => Int -> g -> (g, [[Char]])
-population 0 gen = Operators.mutate (gen, take 30 $ Initiator.start_population gen)
+population 0 gen = Operators.mutate (gen, take Config.initial_population $ Initiator.start_population gen)
 population n gen =
   let pop = population (n-1) gen
   in step pop
@@ -32,5 +33,5 @@ step pop
 
 main = do
   randomGen <- newStdGen
-  let pop = Selector.order . evaluate . snd $ population 43 randomGen
+  let pop = Selector.order . evaluate . snd $ population Config.max_epochs randomGen
     in print (take 20 pop, last pop)
