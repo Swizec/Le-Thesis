@@ -9,14 +9,24 @@ import Data.List
 
 import qualified Evaluators.Basic as Evaluator
 
-mutate::(RandomGen g) => g -> [Char] -> (g, [Char])
-mutate gen s
-  | should' = mutate' gen' s
+-- runs mutation on a whole population
+mutate :: (RandomGen g) => (g, [[Char]]) -> (g, [[Char]])
+mutate (gen, xs) = mapAccumL mutate1 gen xs
+
+-- mutates single element several times
+mutate1::(RandomGen g) => g -> [Char] -> (g, [Char])
+mutate1 gen s = fst $ mapAccumL (\(g, s) _ -> (mutate' g s, 0)) (gen, s) [1]
+
+-- possibly mutate a single string
+mutate'::(RandomGen g) => g -> [Char] -> (g, [Char])
+mutate' gen s
+  | should' = do_operation gen' s
   | otherwise = (gen', s)
   where (gen', should') = should gen
 
-mutate'::(RandomGen g) => g -> [Char] -> (g, [Char])
-mutate' gen s
+-- do a mutation
+do_operation::(RandomGen g) => g -> [Char] -> (g, [Char])
+do_operation gen s
   | typ == 2 = change place s gen'
   | typ == 1 = (gen', remove place s)
   | typ == 0 = add place s gen'
