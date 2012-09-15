@@ -6,17 +6,22 @@ module Initiators.MarkovChain (
 
 import System.Random
 import Data.HashMap
+import Data.List.Split as Split
+import Data.Char
 
 import Config
 
 --start_population::(RandomGen g) => g -> [[Char]]
 start_population gen = do
-  return . chain .tokenize =<< corpus
+  return . chain . tokenize =<< corpus
 
 corpus = readFile "data/ring-o-rosies.txt"
 
 tokenize::String -> [String]
-tokenize s = words s
+tokenize s = Prelude.filter (\x -> x /= " " && x /= "") $
+             Split.split (whenElt
+                          (\x -> isSeparator x || isPunctuation x || x == '\n'))
+             s
 
 chain::[String] -> Map String [String]
 chain [now, last] =
