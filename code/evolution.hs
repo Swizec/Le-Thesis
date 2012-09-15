@@ -1,5 +1,6 @@
 
 import qualified Initiators.Basic as Initiator
+import qualified Initiators.MarkovChain as MCInitiator
 import qualified Evaluators.Basic as Evaluator
 import qualified Operators.Basic as Operators
 import qualified Selectors.Basic as Selector
@@ -33,5 +34,8 @@ step pop
 
 main = do
   randomGen <- newStdGen
-  let pop = Selector.order . evaluate . snd $ population Config.max_epochs randomGen
-    in print (take 20 pop, last pop)
+
+  bla <- MCInitiator.start_population randomGen
+  print bla
+--  let pop = Selector.order . evaluate . snd $ population Config.max_epochs randomGen
+--    in print (take 20 pop, last pop)
