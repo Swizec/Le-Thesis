@@ -11,12 +11,12 @@ import Data.Char
 
 import Config
 
---start_population::(RandomGen g) => g -> [[Char]]
+-- read corpus data
+-- build markov chain
+-- spit out data
+start_population::(RandomGen g) => g -> String -> IO [String]
 start_population gen start = do
-  return . (produce gen start). chain . tokenize =<< corpus
---    in return $ produce gen markov start
-
-corpus = readFile "data/ring-o-rosies.txt"
+  return . (produce gen start). chain . tokenize =<< readFile "data/ring-o-rosies.txt"
 
 tokenize::String -> [String]
 tokenize s = Prelude.filter (\x -> x /= " " && x /= "") $
@@ -37,11 +37,6 @@ next_token gen map s =
   in (gen', choices!!i)
 
 produce::(RandomGen g) => g -> String -> Map String [String] -> [String]
-produce gen "" map = [""]
 produce gen s map =
   let (gen', next) = next_token gen map s
-  in next:(produce gen' next map)
-
--- read corpus data
--- build markov chain
--- spit out data
+  in s:(produce gen' next map)

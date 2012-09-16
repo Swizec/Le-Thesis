@@ -35,7 +35,7 @@ step pop
 main = do
   randomGen <- newStdGen
 
-  bla <- MCInitiator.start_population randomGen "ring"
-  print $ take 10 bla
+  bla <- MCInitiator.start_population randomGen "a"
+  print $ take 15 bla
 --  let pop = Selector.order . evaluate . snd $ population Config.max_epochs randomGen
 --    in print (take 20 pop, last pop)
