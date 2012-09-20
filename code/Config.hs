@@ -10,3 +10,4 @@ mutate_N = 1::Int
 mutate_threshold = 0.8
 seed_data = "data/oasis.txt"
 startword = "when"
+seed_length = 30::Int

@@ -15,7 +15,7 @@ import Config
 -- spit out data
 start_population::(RandomGen g) => g -> String -> IO String
 start_population gen start = do
-  return . (foldr detokenize "") . (take 25) . (produce gen start). chain . tokenize =<< readFile Config.seed_data
+  return . (foldr detokenize "") . (take Config.seed_length) . (produce gen start). chain . tokenize =<< readFile Config.seed_data
 
 tokenize::String -> [String]
 tokenize s = Prelude.filter (\x -> x /= " " && x /= "") $
