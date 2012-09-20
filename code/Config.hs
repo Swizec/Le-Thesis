@@ -8,3 +8,5 @@ initial_population = 50::Int
 max_population = 6000::Int
 mutate_N = 1::Int
 mutate_threshold = 0.8
+seed_data = "data/oasis.txt"
+startword = "when"

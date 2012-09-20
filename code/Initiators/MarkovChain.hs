@@ -1,5 +1,4 @@
 
-
 module Initiators.MarkovChain (
   start_population
   ) where
@@ -14,15 +13,21 @@ import Config
 -- read corpus data
 -- build markov chain
 -- spit out data
-start_population::(RandomGen g) => g -> String -> IO [String]
+start_population::(RandomGen g) => g -> String -> IO String
 start_population gen start = do
-  return . (produce gen start). chain . tokenize =<< readFile "data/ring-o-rosies.txt"
+  return . (foldr detokenize "") . (take 25) . (produce gen start). chain . tokenize =<< readFile Config.seed_data
 
 tokenize::String -> [String]
 tokenize s = Prelude.filter (\x -> x /= " " && x /= "") $
              Split.split (whenElt
-                          (\x -> isSeparator x || isPunctuation x || x == '\n'))
-             s
+                          (\x -> isSeparator x || isPunctuation x || x == '\n')) $
+             Prelude.map toLower s
+
+detokenize::String -> String -> String
+detokenize a b
+  | punctuation a || punctuation b = a++b
+  | otherwise = a++" "++b
+  where punctuation = (\x -> length x > 0 && isPunctuation (x!!0))
 
 chain::[String] -> Map String [String]
 chain [now, last] =
